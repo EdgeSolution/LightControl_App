@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">LightControl</string>
+    <string name="bulb1">Light1</string>
+    <string name="bulb2">Light2</string>
+    <string name="bulb3">Light3</string>
+    <string name="bulb4">Light4</string>
+    <string name="bulb5">Light5</string>
+    <string name="bulb6">Light6</string>
+    <string name="active_report">Active Reporting</string>
+
+</resources>
