@@ -1,4 +1,4 @@
-package com.advantech.lightcontrol;
+package com.adv.lightcontrol;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -29,7 +29,7 @@ import java.io.InputStreamReader;
 public class MainActivity extends Activity {
     private static String TAG = "MainActivity";
     private MQTTWrapper mqttWrapper = null;
-    private String mqttClientId = "com.advantech.lightcontrol";
+    private String mqttClientId = "com.adv.lightcontrol";
     private ImageButton bulb0,bulb1,bulb2,bulb3,bulb4,bulb5;
     private Switch bulb0_switch,bulb1_switch,bulb2_switch,bulb3_switch,bulb4_switch,bulb5_switch;
     private CheckBox active_report_checkbox;

@@ -63,7 +63,7 @@ android {
 
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.advantech.lightcontrol"
+        applicationId "com.adv.lightcontrol"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode increasedVersionCode()

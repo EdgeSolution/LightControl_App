@@ -1,4 +1,4 @@
-package com.advantech.lightcontrol;
+package com.adv.lightcontrol;
 
 
 import android.content.Context;
