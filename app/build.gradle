@@ -42,11 +42,13 @@ def changeVersionName() {
     props.load(new FileInputStream(propFile))
     def code = props['VERSION_CODE'].toInteger()
     if (isRelease) {
-        def mainVersion = (int)(code/100)
+        //def mainVersion = (int)(code/100)
         // def minorVersion = ((int)(code/10))%10
-        def minorVersion = (int)(code%100)
+        //def minorVersion = (int)(code%100)
         def gitCommitLog= lastGitCommit()
-        return mainVersion+"."+minorVersion+"."+gitCommitLog
+        //return mainVersion+"."+minorVersion+"."+gitCommitLog
+        return code+"."+gitCommitLog
+
     }
     return ""
 }
@@ -60,17 +62,15 @@ android {
             storePassword 'advantech'
         }
     }
-
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.adv.lightcontrol"
-        minSdkVersion 23
+        minSdkVersion 22
         targetSdkVersion 28
         versionCode increasedVersionCode()
         versionName changeVersionName()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
     applicationVariants.all { variant ->
         if ("release" == variant.buildType.name) {
             variant.outputs.all {
@@ -78,7 +78,6 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -86,10 +85,12 @@ android {
             signingConfig signingConfigs.config
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
