@@ -6,11 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -25,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 
 public class MainActivity extends Activity {
     private static String TAG = "MainActivity";
@@ -102,8 +102,6 @@ public class MainActivity extends Activity {
             active_report_checkbox.setChecked(true);
         }
 
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -111,11 +109,21 @@ public class MainActivity extends Activity {
                     try {
                         //String command = "ps |grep mosquitto";
                         String command = "ps";
-                        if (commandIsRuning(command)) {
-                            break;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            String mosquittoIsRunning = getSystemStringProperties(MainActivity.this,"adv.mosquittoIsRunning","false");
+                            if (mosquittoIsRunning != null && !mosquittoIsRunning.isEmpty() && mosquittoIsRunning.equals("true")) {
+                                break;
+                            }
+                            Log.d(TAG, "isServiceRunning ...");
+                        }else {
+                            if (commandIsRuning(command)) {
+                                break;
+                            }
+                            Log.d(TAG, "ps command ...");
                         }
-                        Log.d(TAG, "ps command ...");
+
                         Thread.sleep(3000);
+
                     } catch (InterruptedException | IOException e) {
                         Log.d(TAG, "Exception Error ...");
                         e.printStackTrace();
@@ -504,5 +512,28 @@ public class MainActivity extends Activity {
         }
     }
 
+
+    public static String getSystemStringProperties(Context context, String key, String def) throws IllegalArgumentException {
+        String ret = def;
+        try {
+            ClassLoader cl = context.getClassLoader();
+            @SuppressWarnings("rawtypes")
+            Class SystemProperties = cl.loadClass("android.os.SystemProperties");
+            @SuppressWarnings("rawtypes")
+            Class[] paramTypes = new Class[2];
+            paramTypes[0] = String.class;
+            paramTypes[1] = String.class;
+            Method get = SystemProperties.getMethod("get", paramTypes);
+            Object[] params = new Object[2];
+            params[0] = new String(key);
+            params[1] = new String(def);
+            ret = (String) get.invoke(SystemProperties, params);
+        } catch (IllegalArgumentException iAE) {
+            throw iAE;
+        } catch (Exception e) {
+            ret = def;
+        }
+        return ret;
+    }
 
 }
