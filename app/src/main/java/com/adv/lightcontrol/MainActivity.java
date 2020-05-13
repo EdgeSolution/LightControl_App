@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
                     try {
                         //String command = "ps |grep mosquitto";
                         String command = "ps";
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             String mosquittoIsRunning = getSystemStringProperties(MainActivity.this,"adv.mosquittoIsRunning","false");
                             if (mosquittoIsRunning != null && !mosquittoIsRunning.isEmpty() && mosquittoIsRunning.equals("true")) {
                                 break;
@@ -440,6 +440,9 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mqttWrapper.destroy();
+        if(broadcastReceiver != null){
+            unregisterReceiver(broadcastReceiver);
+        }
     }
 
     private void connectMqttBroker() {
